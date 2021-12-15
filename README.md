@@ -9,3 +9,8 @@ In particular, we were asked to:
 - use ROS for controlling the robot;
 - create a node for the control of the robot;
 - create an additional node to increase/decrease the velocity and reset the position of the robot.
+
+The following figure shows the circuit that was used for the simulation.
+![alt text](https://github.com/sarasgambato/ResearchTrack1_Assignment2/blob/main/second_assignment/world/tracciato.png)
+
+## Installing and running
