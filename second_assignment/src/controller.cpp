@@ -49,24 +49,24 @@ void robotCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
     float min_front = getMinimum(310, 409, distances);
     float min_left = getMinimum(670, 719, distances);
 
-    if (min_front > 2) {
+    if (min_front > 1.5) {
         my_vel.linear.x = 1.5 + acc_factor;
         my_vel.angular.z = 0;
     }
     else {
         if (min_right < min_left) {
-            my_vel.angular.z = -1.5;
-            my_vel.linear.x = 0.75;
+            my_vel.angular.z = 1;
+            my_vel.linear.x = 0.5;
         }
         else {
-            my_vel.angular.z = 1.5;
-            my_vel.linear.x = 0.75;
+            my_vel.angular.z = -1;
+            my_vel.linear.x = 0.5;
         }
     }
 
 
-    ROS_INFO("Linear velocity: x = %f, y = %f, z = %f\n", my_vel.linear.x, my_vel.linear.y, my_vel.linear.z);
-    ROS_INFO("Angular velocity: x = %f, y = %f, z = %f\n", my_vel.angular.x, my_vel.angular.y, my_vel.angular.z);
+    ROS_INFO("Linear velocity: Vx = %f, Vy = %f, Vz = %f\n", my_vel.linear.x, my_vel.linear.y, my_vel.linear.z);
+    ROS_INFO("Angular velocity: Wx = %f, Wy = %f, Wz = %f\n", my_vel.angular.x, my_vel.angular.y, my_vel.angular.z);
     ROS_INFO("Acceleration factor: %f\n", acc_factor);
     pub.publish(my_vel);
 }
