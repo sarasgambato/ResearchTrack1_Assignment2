@@ -4,9 +4,9 @@
 
 ### Professor [Carmine Recchiuto](https://github.com/CarmineD8)
 
-The aim of this project is to make a robot move autonomously inside the Monza circuit without hitting the walls.
+The aim of this project is to make a robot move autonomously inside the Autodromo Nazionale di Monza without hitting the track limits.
 In particular, we were asked to:
-- use ROS for controlling the robot;
+- use ROS (Robot-Operating-System) for controlling the robot;
 - create a node for the control of the robot;
 - create an additional node to increase/decrease the velocity and reset the position of the robot.
 
@@ -19,6 +19,7 @@ As we can see in the image, the little blue dot represents the robot, which is e
 In particular, the robot has 720 sensors, so each sensor gives feedback regarding a 0.25 degrees range.
 
 ## Installing and running
+The simulation requires the installation of ROS, in particular the Noetic Release of ROS.
 ### Longer version
 To run the program, first you need to open a shell window in your ROS workspace and to build the workspace with the command `catkin_make` in the shell; the you must follow this instructions:
 1) run the master node with the following command:
@@ -48,4 +49,14 @@ Alternatively, you could use the following command:
 ```sh
 roslaunch second_assignment launch.launch
 ```
-which will run the environment and all the nodes (including the master node) and only one shell window will be opened.
+which will run the environment and all the nodes (including the master node) and only one shell window will be opened. 
+Moreover, using this version allows the user to use a keybord input to kill all the nodes, as will be explained in the section regarding the service.
+
+## Controller node
+This node allows the robot to drive for an indefinite amount of time around the arena: when the robot approaches a track limit the controller makes it turn right or left.
+
+The controller uses the `/base_scan` topic to get information about the surrounding environment after subscribing to it in the `main` function. So when a message is received from the subscriber relative to this topic, the controller enters in the `robotCallback`, which:
+1. saves the `ranges` vector;
+2. calls the function `getMinimum(int start, int end, float distances[])` three times;
+3. checks whether the robot can move forward or not.
+
