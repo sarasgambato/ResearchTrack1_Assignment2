@@ -2,7 +2,12 @@
 #include "second_assignment/Service.h"
 #include "std_srvs/Empty.h"
 
+// delta to increase the linear velocity
 #define ACC 0.25
+
+// thresholds for the acceleration factor
+#define MAX_ACC 1.5
+#define MIN_ACC -1.5
 
 std_srvs::Empty rst;
 
@@ -15,13 +20,19 @@ bool serverCallback(second_assignment::Service::Request &req, second_assignment:
         // accelerate
         case 'a':
         case 'A':
-            acc_factor += ACC;
+            if (acc_factor < MAX_ACC)
+                acc_factor += ACC;
+            else
+                std::cout << "Maximum acceleration factor reached.\n";
             break;
 
         // decelerate
         case 'd':
         case 'D':
-            acc_factor -= ACC;
+            if (acc_factor > MIN_ACC)
+                acc_factor -= ACC;
+            else
+                std::cout << "Minimum acceleration factor reached.\n";
             break;
 
         // reset position

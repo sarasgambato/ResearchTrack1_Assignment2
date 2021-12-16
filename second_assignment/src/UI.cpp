@@ -12,12 +12,15 @@ void uiCallbakc()
 
     char input;
 
+    std::cout << "MENU\n";
     std::cout << "Press:\ta/A to accelerate the robot;\n";
     std::cout << "Press:\td/D to decelerate the robot;\n";
     std::cout << "Press:\tr/R to reset the position of the robot;\n";
     std::cout << "Press:\te/E to exit the program.\n";
 
     std::cin >> input;
+
+    system("clear");
 
     srv.request.input = input;
 
