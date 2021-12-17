@@ -26,30 +26,30 @@ The simulation requires the installation of ROS, in particular the Noetic Releas
 To run the program, first you need to open a shell window in your ROS workspace and to build the workspace with the command `catkin_make` in the shell; the you must follow this instructions:
 1) run the master node with the following command:
 ```sh
-roscore &
+$ roscore &
 ```
 2) open the environment with the following command:
 ```sh
-stage_ros stageros $(rospack find second_assignment)/world/my_world.world
+$ stage_ros stageros $(rospack find second_assignment)/world/my_world.world
 ```
 3) open another shell window in your ROS workspace and run the following command to run the node relative to the controller of the robot:
 ```sh
-rosrun second_assignment robot_controller
+$ rosrun second_assignment robot_controller
 ```
 4) open another shell window in your ROS workspace and run the following command to run the node relative to the server of the robot:
 ```sh
-rosrun second_assignment robot_server
+$ rosrun second_assignment robot_server
 ```
 5) open another shell window in your ROS workspace and run the following command to run the node relative to the user interface:
 ```sh
-rosrun second_assignment robot_UI
+$ rosrun second_assignment robot_UI
 ```
 So in the end you should have four opened shell windows.
 
-### Shorter version
+###  <a id="shorter"></a> Shorter version
 Alternatively, you could use the following command:
 ```sh
-roslaunch second_assignment launch.launch
+$ roslaunch second_assignment launch.launch
 ```
 which will run the environment and all the nodes (including the master node) and only one shell window will be opened. 
 Moreover, using this version allows the user to use a keybord input to kill all the nodes, as will be explained in the section regarding the service.
@@ -79,20 +79,24 @@ This function updates a global variable, which is `acc_factor`, that sets the ve
 This node prints on the shell a menu which tells the user which keybord inputs can be used to increase/decrease the velocity of the robot, to reset the position and to kill the nodes. The inputs are:
 - a, or A, to increase the velocity (accelerate);
 - d, or D, to decrease the velocity (decelerate);
-- r, or R, to reset the position;
+- r, or R, to reset the robot to the initial position (reset);
 - e, or E, to kill all nodes (exit), to be used only if the command `roslaunch` is used.
 When a correct input is inserted by the user, the node sends it to the Service node, which manages the velocity, and publishes the new velocity when the Service node sends it back.
 
 ## <a id="service-node"></a> Service node
-This node manages the acceleration factor based on the input received by the UI node. 
+This node prints on the shell the velocities of the robot and the acceleration factor and it manages the acceleration factor based on the input received by the UI node. 
 
 If the user prompts the Service node to increase (or decrease) the velocity, first the `serverCallback` function checks whether the maximum (or minimum) acceleration factor has been reached (which is `MAX_ACC = 1.5`, or `MIN_ACC = -1.5`); if not, the acceleration factor is inceased (or decreased) of `0.25`.
 
-If the user prompts the Service node to reset the robot position, the `serverCallback` function uses the service `/reset_position` to reset both the position and the velocity of the robot to their initial value.
+If the user prompts the Service node to reset the robot position, the `serverCallback` function uses the service `/reset_positions` to reset both the position and the velocity of the robot to their initial value.
 
 If the user prompts the Service node to kill all the nodes, this will work only if `roslaunch` was used, because this command opens only one shell window. Otherwise only the Service node will be killed.
 
 If the user presses a wrong input, the Service node will notify the user that an invalid input has been received.
 
 ## Flowchart and graph
+Using the [shorter version](#shorter) to run the nodes, this is the graph that illustrates the relatioships between the nodes. It can be seen using the command:
+```sh
+$ rqt_graph
+```
 ![rosgraph](https://user-images.githubusercontent.com/62473854/146533011-c3f710ff-c721-4df4-97ae-0b4719c91ee5.png)
