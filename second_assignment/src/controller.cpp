@@ -63,16 +63,14 @@ void robotCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
             my_vel.linear.x = 0.5;
         }
     }
-
-
-    ROS_INFO("Linear velocity: Vx = %f, Vy = %f, Vz = %f\n", my_vel.linear.x, my_vel.linear.y, my_vel.linear.z);
-    ROS_INFO("Angular velocity: Wx = %f, Wy = %f, Wz = %f\n", my_vel.angular.x, my_vel.angular.y, my_vel.angular.z);
-    ROS_INFO("Acceleration factor: %f\n", acc_factor);
+    
     pub.publish(my_vel);
 }
 
 void velCallback(const second_assignment::Vel::ConstPtr& msg)
 {
+    /* Function to update the acceleration factor*/ 
+
     acc_factor = msg->my_msg;
 }
 
@@ -82,14 +80,12 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "control");
     ros::NodeHandle nh;
 
-    // define the publisher
     pub = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
 
-    // initialize and define 2 subscriber 
+    // initialize 2 subscriber 
     ros::Subscriber sub1 = nh.subscribe("/base_scan", 1, robotCallback);
     ros::Subscriber sub2 = nh.subscribe("/vel", 1, velCallback);
 
-    // function to start the program
     ros::spin();
 
     return 0;

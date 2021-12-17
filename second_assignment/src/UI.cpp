@@ -2,6 +2,7 @@
 #include "second_assignment/Vel.h"
 #include "second_assignment/Service.h"
 
+// declaration of publisher and client
 ros::Publisher pub;
 ros::ServiceClient client;
 
@@ -12,16 +13,19 @@ void uiCallbakc()
 
     char input;
 
+    // prompt the user
     std::cout << "MENU\n";
     std::cout << "Press:\ta/A to accelerate the robot;\n";
     std::cout << "Press:\td/D to decelerate the robot;\n";
     std::cout << "Press:\tr/R to reset the position of the robot;\n";
-    std::cout << "Press:\te/E to exit the program.\n";
+    std::cout << "Press:\te/E to exit the program (only if roslaunch was used).\n";
 
+    // get the keybord input
     std::cin >> input;
 
     system("clear");
 
+    // send the input to the service
     srv.request.input = input;
 
     client.waitForExistence();
