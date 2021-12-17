@@ -56,7 +56,7 @@ bool serverCallback(second_assignment::Service::Request &req, second_assignment:
             break;
     }
     
-    std::cout << "During turns: linear velocity = (" << 1*acc_factor << ", 0, 0), angular velocity = (0, 0, +/- " << 0.4*acc_factor << ")\n";
+    std::cout << "During turns: linear velocity = (" << 0.4*acc_factor << ", 0, 0), angular velocity = (0, 0, +/- " << 1*acc_factor << ")\n";
     std::cout << "Driving forward: linear velocity = (" << 1.5*acc_factor << ", 0, 0), angular velocity = (0, 0, 0)\n";
     std::cout << "Acceleration factor = " << acc_factor << "\n";
 
