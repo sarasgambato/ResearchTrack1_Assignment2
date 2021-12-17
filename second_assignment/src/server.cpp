@@ -6,8 +6,8 @@
 #define ACC 0.25
 
 // thresholds for the acceleration factor
-#define MAX_ACC 1.5
-#define MIN_ACC -1.5
+#define MAX_ACC 2
+#define MIN_ACC 0
 
 std_srvs::Empty rst;
 
@@ -56,8 +56,8 @@ bool serverCallback(second_assignment::Service::Request &req, second_assignment:
             break;
     }
     
-    std::cout << "During turns: linear velocity = (0.5, 0, 0), angular velocity = (0, 0, +/-1)\n";
-    std::cout << "Driving forward: linear velocity = (" << 1.5+acc_factor << ", 0, 0), angular velocity = (0, 0, 0)\n";
+    std::cout << "During turns: linear velocity = (" << 1*acc_factor << ", 0, 0), angular velocity = (0, 0, +/- " << 0.4*acc_factor << ")\n";
+    std::cout << "Driving forward: linear velocity = (" << 1.5*acc_factor << ", 0, 0), angular velocity = (0, 0, 0)\n";
     std::cout << "Acceleration factor = " << acc_factor << "\n";
 
     res.output = acc_factor;

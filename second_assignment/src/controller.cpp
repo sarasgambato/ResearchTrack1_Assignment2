@@ -50,17 +50,17 @@ void robotCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
     float min_left = getMinimum(670, 719, distances);
 
     if (min_front > 1.5) {
-        my_vel.linear.x = 1.5 + acc_factor;
+        my_vel.linear.x = 1.5 * acc_factor;
         my_vel.angular.z = 0;
     }
     else {
         if (min_right < min_left) {
-            my_vel.angular.z = 1;
-            my_vel.linear.x = 0.5;
+            my_vel.angular.z = 1 * acc_factor;
+            my_vel.linear.x = 0.4 * acc_factor;
         }
         else {
-            my_vel.angular.z = -1;
-            my_vel.linear.x = 0.5;
+            my_vel.angular.z = -1 * acc_factor;
+            my_vel.linear.x = 0.4 * acc_factor;
         }
     }
     
