@@ -25,7 +25,6 @@ bool serverCallback(second_assignment::Service::Request &req, second_assignment:
         case 'A':
             if (acc_factor < MAX_ACC)
                 acc_factor += ACC;
-
             else
                 std::cout << "Maximum acceleration factor reached.\n";
             break;
@@ -58,7 +57,7 @@ bool serverCallback(second_assignment::Service::Request &req, second_assignment:
     }
     
     std::cout << "During turns: linear velocity = (0.5, 0, 0), angular velocity = (0, 0, +/-1)\n";
-    std::cout << "Driving forward: linear velocity = (" << 1.5+acc_factor << ", 0, 0), angular velocity = (0, 0, +/-1)\n";
+    std::cout << "Driving forward: linear velocity = (" << 1.5+acc_factor << ", 0, 0), angular velocity = (0, 0, 0)\n";
     std::cout << "Acceleration factor = " << acc_factor << "\n";
 
     res.output = acc_factor;
