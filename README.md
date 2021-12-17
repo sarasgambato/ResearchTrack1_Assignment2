@@ -76,7 +76,7 @@ After getting the minimum value from each subsection, the robotCallback compares
 ### velCallback
 The controller also uses  `/vel`, managed by the UI node, to get information about the velocity (in particular if it should be increased/decreased) after subscribing to it in the `main` function. So when a message from this subscriber is received, the controller enters in the `velCallback` function.
 
-This function updates a global variable, which is `acc_factor`, that sets the velocity of the robot only when it is driving forward, since the linear velocity and the angular velocity are fixed when the robot makes a turn. The user can decide whether to increase or decrease this variable via a user interface (described in the following section).
+This function updates a global variable, which is `acc_factor`, that sets the angular velocity and the linear velocity of the robot. The user can decide whether to increase or decrease this variable via a user interface (described in the following section).
 
 ## <a id="ui-node"></a> UI node
 This node prints on the shell a menu which tells the user which keybord inputs can be used to increase/decrease the velocity of the robot, to reset the position and to kill the nodes. The inputs are:
@@ -90,7 +90,7 @@ When a correct input is inserted by the user, the node sends it to the Service n
 ## <a id="service-node"></a> Service node
 This node prints on the shell the velocities of the robot and the acceleration factor and it manages the acceleration factor based on the input received by the UI node. 
 
-If the user prompts the Service node to increase (or decrease) the velocity, first the `serverCallback` function checks whether the maximum (or minimum) acceleration factor has been reached (which is `MAX_ACC = 1.5`, or `MIN_ACC = -1.5`); if not, the acceleration factor is inceased (or decreased) of `0.25`.
+If the user prompts the Service node to increase (or decrease) the velocity, first the `serverCallback` function checks whether the maximum (or minimum) acceleration factor has been reached (which is `MAX_ACC = 2`, or `MIN_ACC = 0`); if not, the acceleration factor is inceased (or decreased) of `0.25`.
 
 If the user prompts the Service node to reset the robot position, the `serverCallback` function uses the service `/reset_positions` to reset both the position and the velocity of the robot to their initial value.
 
@@ -117,4 +117,3 @@ The following flowchart shows the behaviour of the Controller node, since it is 
 ### Possible improvements
 1. Implementing the functionality to kill all nodes even when the [longer version](#longer) to run the nodes is used.
 2. To make the robot move more swiftly, since it moves with a zig-zag movement to avoid hitting the track limits.
-3. To update also the linear and the angular velocities when the robot turns if the user prompts the service to increase/decrease the velocity of the robot.
