@@ -55,8 +55,20 @@ Moreover, using this version allows the user to use a keybord input to kill all 
 ## Controller node
 This node allows the robot to drive for an indefinite amount of time around the arena: when the robot approaches a track limit the controller makes it turn right or left.
 
-The controller uses the `/base_scan` topic to get information about the surrounding environment after subscribing to it in the `main` function. So when a message is received from the subscriber relative to this topic, the controller enters in the `robotCallback`, which:
-1. saves the `ranges` vector;
-2. calls the function `getMinimum(int start, int end, float distances[])` three times;
-3. checks whether the robot can move forward or not.
+### robotCallback
+The controller uses the `/base_scan` topic to get information about the surrounding environment after subscribing to it in the `main` function. So when a message is received from the subscriber relative to this topic, the controller enters in the `robotCallback` function.
 
+This function gets the ranges vector (which has 720 values) and saves it in another variable called `distances[]`. Then it studies three subsections of these vector via the function `getMinimum(int start, int end, float distances[])` (which gets the lowest value of a `distances[]` array in a subsection that goes from index `start` to index `end` of said array).
+The three subsections are:
+- right, which is studied calling `getMinimum(0, 49, distances[])`;
+- front, which is studied calling `getMinimum(310, 409, distances[])`;
+- left, which is studied calling `getMinimum(620, 719, distances[])`;
+
+After getting the minimum value from each subsection, the robotCallback compares them:
+- if the closest obstacle on the front of the robot is at a distance of at least 1.5, then the robot drives forward.
+- if the closest obstacle on the front of the robot is at a distance lower than 1.5, then the right and left values are compared and the robot will turn based on which track limit is closest to the robot.
+
+### velCallback
+The controller also uses a custom service, `/vel`, to get information about the velocity (in particular if it should be increased/decreased) after subscribing to it in the `main` function. So when a message from this subscriber is received, the controller enters in the `velCallback` function.
+
+This function updates a global variable, which is `acc_factor`, a variable that sets the velocity of the robot when it is driving forward. The user can decide whether to increase or decrease this variable via a user interface.
