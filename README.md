@@ -8,7 +8,9 @@ The aim of this project is to make a robot move autonomously inside the Autodrom
 In particular, we were asked to:
 - use ROS (Robot-Operating-System) for controlling the robot;
 - create a node for the control of the robot;
-- create an additional node to increase/decrease the velocity and reset the position of the robot.
+- create an additional node which interacts with the user to increase/decrease the velocity and reset the position of the robot.
+
+Regarding the last point, what I decided to do was to create two separate nodes (apart from the [Controller node](#controller-node)), one to interact with the user ([UI node](#ui-node)) and one to actually modify the robot position and velocity ([Service node](#service-node)). The two nodes work closely together.
 
 The following figure shows the circuit that was used for the simulation.
 <p align="center">
@@ -52,7 +54,7 @@ roslaunch second_assignment launch.launch
 which will run the environment and all the nodes (including the master node) and only one shell window will be opened. 
 Moreover, using this version allows the user to use a keybord input to kill all the nodes, as will be explained in the section regarding the service.
 
-## Controller node
+## <a id="controller-node"></a> Controller node
 This node allows the robot to drive for an indefinite amount of time around the arena: when the robot approaches a track limit the controller makes it turn right or left, then information about the velocity is published via the `/cmd_vel` topic.
 
 ### robotCallback
@@ -73,7 +75,7 @@ The controller also uses  `/vel`, managed by the UI node, to get information abo
 
 This function updates a global variable, which is `acc_factor`, that sets the velocity of the robot only when it is driving forward, since the linear velocity and the angular velocity are fixed when the robot makes a turn. The user can decide whether to increase or decrease this variable via a user interface (described in the following section).
 
-## UI node
+## <a id="ui-node"></a> UI node
 This node prints on the shell a menu which tells the user which keybord inputs can be used to increase/decrease the velocity of the robot, to reset the position and to kill the nodes. The inputs are:
 - a, or A, to increase the velocity (accelerate);
 - d, or D, to decrease the velocity (decelerate);
@@ -81,5 +83,15 @@ This node prints on the shell a menu which tells the user which keybord inputs c
 - e, or E, to kill all nodes (exit), to be used only if the command `roslaunch` is used.
 When a correct input is inserted by the user, the node sends it to the Service node, which manages the velocity, and publishes the new velocity when the Service node sends it back.
 
-## Service node
-This node manages the acceleration factor based on the input received by the UI node.
+## <a id="service-node"></a> Service node
+This node manages the acceleration factor based on the input received by the UI node. 
+
+If the user prompts the Service node to increase (or decrease) the velocity, first the `serverCallback` function checks whether the maximum (or minimum) acceleration factor has been reached (which is `MAX_ACC = 1.5`, or `MIN_ACC = -1.5`); if not, the acceleration factor is inceased (or decreased) of `0.25`.
+
+If the user prompts the Service node to reset the robot position, the `serverCallback` function uses the service `/reset_position` to reset both the position and the velocity of the robot to their initial value.
+
+If the user prompts the Service node to kill all the nodes, this will work only if `roslaunch` was used, because this command opens only one shell window. Otherwise only the Service node will be killed.
+
+If the user presses a wrong input, the Service node will notify the user that an invalid input has been received.
+
+## Flowchart and graph
