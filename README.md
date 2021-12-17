@@ -22,7 +22,7 @@ In particular, the robot has 720 sensors, so each sensor gives feedback regardin
 
 ## Installing and running
 The simulation requires the installation of ROS, in particular the Noetic Release of ROS.
-### Longer version
+### <a id="longer"></a> Longer version
 To run the program, first you need to open a shell window in your ROS workspace and to build the workspace with the command `catkin_make` in the shell; the you must follow this instructions:
 1) run the master node with the following command:
 ```sh
@@ -46,7 +46,7 @@ $ rosrun second_assignment robot_UI
 ```
 So in the end you should have four opened shell windows.
 
-###  <a id="shorter"></a> Shorter version
+### <a id="shorter"></a> Shorter version
 Alternatively, you could use the following command:
 ```sh
 $ roslaunch second_assignment launch.launch
@@ -95,8 +95,22 @@ If the user prompts the Service node to kill all the nodes, this will work only 
 If the user presses a wrong input, the Service node will notify the user that an invalid input has been received.
 
 ## Flowchart and graph
+### graph
 Using the [shorter version](#shorter) to run the nodes, this is the graph that illustrates the relatioships between the nodes. It can be seen using the command:
 ```sh
 $ rqt_graph
 ```
-![rosgraph](https://user-images.githubusercontent.com/62473854/146533011-c3f710ff-c721-4df4-97ae-0b4719c91ee5.png)
+<p align="center">
+<img src="https://user-images.githubusercontent.com/62473854/146533011-c3f710ff-c721-4df4-97ae-0b4719c91ee5.png" width=75%, height=75%>
+ </p>
+
+### flowchart
+The following flowchart shows the behaviour of the Controller node, since it is the one that directly controls the robot.
+<p align="center">
+<img src="https://user-images.githubusercontent.com/62473854/146542515-7bb9006e-55e3-4e50-86ad-7e1b415f0c5e.png" width=70%, height=70%>
+</p>
+
+### Possible improvements
+1. Implementing the functionality to kill all nodes even when the [longer version](#longer) to run the nodes is used.
+2. To make the robot move more swiftly, since it moves with a zig-zag movement to avoid hitting the track limits.
+3. To update also the linear and the angular velocities when the robot turns if the user prompts the service to increase/decrease the velocity of the robot.
