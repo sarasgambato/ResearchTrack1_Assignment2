@@ -22,8 +22,11 @@ In particular, the robot has 720 sensors, so each sensor gives feedback regardin
 
 ## Installing and running
 The simulation requires the installation of ROS, in particular the Noetic Release of ROS.
+
+To run the program, first you need to open a shell window in your ROS workspace and to build the workspace with the command `catkin_make` in the shell; then you must follow one of the following set of instructions.
+
 ### <a id="longer"></a> Longer version
-To run the program, first you need to open a shell window in your ROS workspace and to build the workspace with the command `catkin_make` in the shell; the you must follow this instructions:
+
 1) run the master node with the following command:
 ```sh
 $ roscore &
@@ -32,15 +35,15 @@ $ roscore &
 ```sh
 $ stage_ros stageros $(rospack find second_assignment)/world/my_world.world
 ```
-3) open another shell window in your ROS workspace and run the following command to run the node relative to the controller of the robot:
+3) open another shell window in your ROS workspace and run the following command to run the Controller node:
 ```sh
 $ rosrun second_assignment robot_controller
 ```
-4) open another shell window in your ROS workspace and run the following command to run the node relative to the server of the robot:
+4) open another shell window in your ROS workspace and run the following command to run the Service node:
 ```sh
 $ rosrun second_assignment robot_server
 ```
-5) open another shell window in your ROS workspace and run the following command to run the node relative to the user interface:
+5) open another shell window in your ROS workspace and run the following command to run the UI node:
 ```sh
 $ rosrun second_assignment robot_UI
 ```
@@ -55,7 +58,7 @@ which will run the environment and all the nodes (including the master node) and
 Moreover, using this version allows the user to use a keybord input to kill all the nodes, as will be explained in the section regarding the service.
 
 ## <a id="controller-node"></a> Controller node
-This node allows the robot to drive for an indefinite amount of time around the arena: when the robot approaches a track limit the controller makes it turn right or left, then information about the velocity is published via the `/cmd_vel` topic.
+This node allows the robot to drive for an indefinite amount of time around the circuit: when the robot approaches a track limit the controller makes it turn right or left, then information about the velocity is published via the `/cmd_vel` topic.
 
 ### robotCallback
 The controller uses the `/base_scan` topic to get information about the surrounding environment after subscribing to it in the `main` function. So when a message is received from the subscriber relative to this topic, the controller enters in the `robotCallback` function.
@@ -81,6 +84,7 @@ This node prints on the shell a menu which tells the user which keybord inputs c
 - d, or D, to decrease the velocity (decelerate);
 - r, or R, to reset the robot to the initial position (reset);
 - e, or E, to kill all nodes (exit), to be used only if the command `roslaunch` is used.
+
 When a correct input is inserted by the user, the node sends it to the Service node, which manages the velocity, and publishes the new velocity when the Service node sends it back.
 
 ## <a id="service-node"></a> Service node
