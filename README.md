@@ -95,3 +95,4 @@ If the user prompts the Service node to kill all the nodes, this will work only 
 If the user presses a wrong input, the Service node will notify the user that an invalid input has been received.
 
 ## Flowchart and graph
+![rosgraph](https://user-images.githubusercontent.com/62473854/146533011-c3f710ff-c721-4df4-97ae-0b4719c91ee5.png)
