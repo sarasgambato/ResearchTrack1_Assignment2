@@ -53,7 +53,7 @@ which will run the environment and all the nodes (including the master node) and
 Moreover, using this version allows the user to use a keybord input to kill all the nodes, as will be explained in the section regarding the service.
 
 ## Controller node
-This node allows the robot to drive for an indefinite amount of time around the arena: when the robot approaches a track limit the controller makes it turn right or left.
+This node allows the robot to drive for an indefinite amount of time around the arena: when the robot approaches a track limit the controller makes it turn right or left, then information about the velocity is published via the `/cmd_vel` topic.
 
 ### robotCallback
 The controller uses the `/base_scan` topic to get information about the surrounding environment after subscribing to it in the `main` function. So when a message is received from the subscriber relative to this topic, the controller enters in the `robotCallback` function.
@@ -69,6 +69,17 @@ After getting the minimum value from each subsection, the robotCallback compares
 - if the closest obstacle on the front of the robot is at a distance lower than 1.5, then the right and left values are compared and the robot will turn based on which track limit is closest to the robot.
 
 ### velCallback
-The controller also uses a custom service, `/vel`, to get information about the velocity (in particular if it should be increased/decreased) after subscribing to it in the `main` function. So when a message from this subscriber is received, the controller enters in the `velCallback` function.
+The controller also uses  `/vel`, managed by the UI node, to get information about the velocity (in particular if it should be increased/decreased) after subscribing to it in the `main` function. So when a message from this subscriber is received, the controller enters in the `velCallback` function.
 
-This function updates a global variable, which is `acc_factor`, a variable that sets the velocity of the robot when it is driving forward. The user can decide whether to increase or decrease this variable via a user interface.
+This function updates a global variable, which is `acc_factor`, that sets the velocity of the robot only when it is driving forward, since the linear velocity and the angular velocity are fixed when the robot makes a turn. The user can decide whether to increase or decrease this variable via a user interface (described in the following section).
+
+## UI node
+This node prints on the shell a menu which tells the user which keybord inputs can be used to increase/decrease the velocity of the robot, to reset the position and to kill the nodes. The inputs are:
+- a, or A, to increase the velocity (accelerate);
+- d, or D, to decrease the velocity (decelerate);
+- r, or R, to reset the position;
+- e, or E, to kill all nodes (exit), to be used only if the command `roslaunch` is used.
+When a correct input is inserted by the user, the node sends it to the Service node, which manages the velocity, and publishes the new velocity when the Service node sends it back.
+
+## Service node
+This node manages the acceleration factor based on the input received by the UI node.
